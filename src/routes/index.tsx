@@ -1,5 +1,7 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../contexts/hooks/useAuth";
+import { useFetchAllEmployees } from "../services/hooks/useFetchAllEmployees";
+import { useLogout } from "../services/hooks/useLogout";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -15,12 +17,25 @@ export const Route = createFileRoute("/")({
 function RouteComponent() {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const { data: employees } = useFetchAllEmployees();
+  const { mutate } = useLogout();
+  const handleLogout = () => {
+    mutate(undefined, {
+      onSuccess: (data) => {
+        console.log("logout! ", data);
+        logout();
+      },
+    });
+  };
+
+  console.log(employees);
+
   return (
     <>
-      <div>Hello "/"!</div>
+      <div></div>
       <button
         onClick={() => {
-          logout();
+          handleLogout();
           navigate({ to: "/login" });
         }}
       >

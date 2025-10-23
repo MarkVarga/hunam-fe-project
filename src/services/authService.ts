@@ -1,5 +1,5 @@
-import api from "axios";
-import { apiEndpoints, BASE_URL } from "../constants/api";
+import api from "../lib/axios";
+import { apiEndpoints } from "../constants/api";
 
 type LoginPayload = {
   username: string;
@@ -7,6 +7,11 @@ type LoginPayload = {
 };
 
 export const loginUser = async (payload: LoginPayload) => {
-  const response = await api.post(`${BASE_URL}/${apiEndpoints.login}`, payload);
+  const response = await api.post(`${apiEndpoints.login}`, payload);
+  return response.data;
+};
+
+export const logoutUser = async () => {
+  const response = await api.post(`${apiEndpoints.logout}`);
   return response.data;
 };
