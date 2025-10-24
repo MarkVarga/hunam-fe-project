@@ -1,7 +1,5 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { useAuth } from "../contexts/hooks/useAuth";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useFetchAllEmployees } from "../services/hooks/useFetchAllEmployees";
-import { useLogout } from "../services/hooks/useLogout";
 import Table from "../components/Table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Education, Employee, PaymentMethod, Sex } from "../types/employee";
@@ -19,18 +17,7 @@ export const Route = createFileRoute("/")({
 });
 
 function RouteComponent() {
-  const { logout } = useAuth();
-  const navigate = useNavigate();
   const { data: employees } = useFetchAllEmployees();
-  const { mutate } = useLogout();
-  const handleLogout = () => {
-    mutate(undefined, {
-      onSuccess: (data) => {
-        console.log("logout! ", data);
-        logout();
-      },
-    });
-  };
 
   const columns = useMemo<ColumnDef<Employee>[]>(
     () => [
@@ -202,14 +189,6 @@ function RouteComponent() {
           <Table data={employees.data} columns={columns} />
         </div>
       )}
-      <button
-        onClick={() => {
-          handleLogout();
-          navigate({ to: "/login" });
-        }}
-      >
-        log out
-      </button>
     </>
   );
 }
