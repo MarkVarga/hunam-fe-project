@@ -7,7 +7,7 @@ import {
   SortingState,
   ColumnSizingInfoState,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface TableProps<T extends object> {
   data: T[];
@@ -36,14 +36,15 @@ export const Table = <T extends object>({ data, columns }: TableProps<T>) => {
     enableSortingRemoval: true,
     onColumnSizingChange: setColumnSizing,
     onColumnSizingInfoChange: setColumnSizingInfo,
-    columnResizeMode: "onChange", // ✅ live resizing
+    columnResizeMode: "onChange",
+    enableColumnResizing: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
 
   return (
-    <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5">
-      <table className="min-w-full divide-y divide-gray-300 bg-white">
+    <div className="w-full overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5">
+      <table className="table-auto min-w-[1500px] divide-y divide-gray-300 bg-white">
         <thead className="bg-gray-50">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -51,7 +52,7 @@ export const Table = <T extends object>({ data, columns }: TableProps<T>) => {
                 <th
                   key={header.id}
                   scope="col"
-                  style={{ width: header.getSize() }}
+                  style={{ minWidth: header.getSize() }}
                   className="relative px-4 py-3 text-left text-sm font-semibold text-gray-700 select-none"
                 >
                   <div
@@ -75,8 +76,10 @@ export const Table = <T extends object>({ data, columns }: TableProps<T>) => {
                     <div
                       onMouseDown={header.getResizeHandler()}
                       onTouchStart={header.getResizeHandler()}
-                      className="absolute right-0 top-0 cursor-col-resize z-10 h-full w-[3px] bg-gray-400"
-                    />
+                      className="absolute right-0 top-0 h-full w-[6px] cursor-col-resize z-10"
+                    >
+                      <div className="h-full w-[2px] bg-gray-400 mx-auto" />
+                    </div>
                   )}
                 </th>
               ))}

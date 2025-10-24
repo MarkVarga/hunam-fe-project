@@ -5,6 +5,7 @@ import { useLogout } from "../services/hooks/useLogout";
 import Table from "../components/Table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Education, Employee, PaymentMethod, Sex } from "../types/employee";
+import { useMemo } from "react";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -31,177 +32,176 @@ function RouteComponent() {
     });
   };
 
-  const columns: ColumnDef<Employee>[] = [
-    {
-      accessorKey: "id",
-      header: "ID",
-      size: 60,
-    },
-    {
-      accessorKey: "email",
-      header: "Email",
-      size: 200,
-    },
-    {
-      accessorKey: "firstName",
-      header: "First Name",
-      size: 120,
-    },
-    {
-      accessorKey: "lastName",
-      header: "Last Name",
-      size: 120,
-    },
-    {
-      accessorKey: "dateOfBirth",
-      header: "Date of Birth",
-      cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
-      size: 120,
-    },
-    {
-      accessorKey: "placeOfBirth",
-      header: "Place of Birth",
-      size: 150,
-    },
-    {
-      accessorKey: "mothersFirstName",
-      header: "Mother's First Name",
-      size: 150,
-    },
-    {
-      accessorKey: "mothersLastName",
-      header: "Mother's Last Name",
-      size: 150,
-    },
-    {
-      accessorKey: "country",
-      header: "Country",
-      size: 100,
-    },
-    {
-      accessorKey: "zipCode",
-      header: "ZIP Code",
-      size: 80,
-    },
-    {
-      accessorKey: "parcelNumber",
-      header: "Parcel No.",
-      size: 100,
-    },
-    {
-      accessorKey: "city",
-      header: "City",
-      size: 120,
-    },
-    {
-      accessorKey: "administrativeArea",
-      header: "Admin Area",
-      size: 120,
-    },
-    {
-      accessorKey: "administrativeAreaType",
-      header: "Area Type",
-      size: 120,
-    },
-    {
-      accessorKey: "houseNumber",
-      header: "House No.",
-      size: 80,
-    },
-    {
-      accessorKey: "building",
-      header: "Building",
-      size: 80,
-    },
-    {
-      accessorKey: "staircase",
-      header: "Staircase",
-      size: 80,
-    },
-    {
-      accessorKey: "floor",
-      header: "Floor",
-      size: 80,
-    },
-    {
-      accessorKey: "door",
-      header: "Door",
-      size: 80,
-    },
-    {
-      accessorKey: "phone",
-      header: "Phone",
-      size: 140,
-    },
-    {
-      accessorKey: "sex",
-      header: "Sex",
-      cell: ({ getValue }) => {
-        const value = getValue<Sex>();
-        return Sex[value];
+  const columns = useMemo<ColumnDef<Employee>[]>(
+    () => [
+      {
+        accessorKey: "id",
+        header: "ID",
+        enableResizing: true,
       },
-      size: 80,
-    },
-    {
-      accessorKey: "education",
-      header: "Education",
-      cell: ({ getValue }) => {
-        const value = getValue<Education>();
-        return Education[value];
+      {
+        accessorKey: "email",
+        header: "Email",
+        enableResizing: true,
       },
-      size: 180,
-    },
-    {
-      accessorKey: "paymentMethod",
-      header: "Payment Method",
-      cell: ({ getValue }) => {
-        const value = getValue<PaymentMethod>();
-        return PaymentMethod[value];
+      {
+        accessorKey: "firstName",
+        header: "First Name",
+        enableResizing: true,
       },
-      size: 140,
-    },
-    {
-      accessorKey: "bankAccountNumber",
-      header: "Bank Account",
-      cell: ({ row }) =>
-        row.original.paymentMethod === PaymentMethod.Transfer
-          ? row.original.bankAccountNumber
-          : "—",
-      size: 180,
-    },
-    {
-      accessorKey: "moneyDispatchAddress",
-      header: "Dispatch Address",
-      cell: ({ row }) =>
-        row.original.paymentMethod === PaymentMethod.Dispatch
-          ? row.original.moneyDispatchAddress
-          : "—",
-      size: 180,
-    },
-    {
-      accessorKey: "cashPaymentDay",
-      header: "Cash Day",
-      cell: ({ row }) =>
-        row.original.paymentMethod === PaymentMethod.Cash
-          ? row.original.cashPaymentDay
-          : "—",
-      size: 100,
-    },
-    {
-      accessorKey: "salary",
-      header: "Salary (HUF)",
-      cell: ({ getValue }) =>
-        getValue<number>().toLocaleString("hu-HU", {
-          style: "currency",
-          currency: "HUF",
-          minimumFractionDigits: 0,
-        }),
-      size: 140,
-    },
-  ];
+      {
+        accessorKey: "lastName",
+        header: "Last Name",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "dateOfBirth",
+        header: "Date of Birth",
+        enableResizing: true,
+        cell: ({ getValue }) =>
+          new Date(getValue<string>()).toLocaleDateString(),
+      },
+      {
+        accessorKey: "placeOfBirth",
+        header: "Place of Birth",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "mothersFirstName",
+        header: "Mother's First Name",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "mothersLastName",
+        header: "Mother's Last Name",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "country",
+        header: "Country",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "zipCode",
+        header: "ZIP Code",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "parcelNumber",
+        header: "Parcel No.",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "city",
+        header: "City",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "administrativeArea",
+        header: "Admin Area",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "administrativeAreaType",
+        header: "Area Type",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "houseNumber",
+        header: "House No.",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "building",
+        header: "Building",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "staircase",
+        header: "Staircase",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "floor",
+        header: "Floor",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "door",
+        header: "Door",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "phone",
+        header: "Phone",
+        enableResizing: true,
+      },
+      {
+        accessorKey: "sex",
+        header: "Sex",
+        enableResizing: true,
+        cell: ({ getValue }) => Sex[getValue<Sex>()],
+      },
+      {
+        accessorKey: "education",
+        header: "Education",
+        enableResizing: true,
+        cell: ({ getValue }) => Education[getValue<Education>()],
+      },
+      {
+        accessorKey: "paymentMethod",
+        header: "Payment Method",
+        enableResizing: true,
+        cell: ({ getValue }) => PaymentMethod[getValue<PaymentMethod>()],
+      },
+      {
+        accessorKey: "bankAccountNumber",
+        header: "Bank Account",
+        enableResizing: true,
+        cell: ({ row }) =>
+          row.original.paymentMethod === PaymentMethod.Transfer
+            ? row.original.bankAccountNumber
+            : "—",
+      },
+      {
+        accessorKey: "moneyDispatchAddress",
+        header: "Dispatch Address",
+        enableResizing: true,
+        cell: ({ row }) =>
+          row.original.paymentMethod === PaymentMethod.Dispatch
+            ? row.original.moneyDispatchAddress
+            : "—",
+      },
+      {
+        accessorKey: "cashPaymentDay",
+        header: "Cash Day",
+        enableResizing: true,
+        cell: ({ row }) =>
+          row.original.paymentMethod === PaymentMethod.Cash
+            ? row.original.cashPaymentDay
+            : "—",
+      },
+      {
+        accessorKey: "salary",
+        header: "Salary (HUF)",
+        enableResizing: true,
+        cell: ({ getValue }) =>
+          getValue<number>().toLocaleString("hu-HU", {
+            style: "currency",
+            currency: "HUF",
+            minimumFractionDigits: 0,
+          }),
+      },
+    ],
+    [],
+  );
   return (
     <>
-      {employees && <Table data={employees.data} columns={columns} />}
+      {employees && (
+        <div className="w-full overflow-x-auto">
+          <Table data={employees.data} columns={columns} />
+        </div>
+      )}
       <button
         onClick={() => {
           handleLogout();
