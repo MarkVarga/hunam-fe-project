@@ -6,6 +6,7 @@ import {
   flexRender,
   SortingState,
   ColumnSizingInfoState,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 
@@ -19,6 +20,11 @@ export const Table = <T extends object>({ data, columns }: TableProps<T>) => {
 
   const [columnSizing, setColumnSizing] = useState<Record<string, number>>({});
 
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10, // You can adjust this
+  });
+
   const [columnSizingInfo, setColumnSizingInfo] =
     useState<ColumnSizingInfoState>({
       columnSizingStart: [],
@@ -31,7 +37,8 @@ export const Table = <T extends object>({ data, columns }: TableProps<T>) => {
   const table = useReactTable({
     data,
     columns,
-    state: { sorting, columnSizing, columnSizingInfo },
+    state: { sorting, columnSizing, columnSizingInfo, pagination },
+    onPaginationChange: setPagination,
     onSortingChange: setSorting,
     enableSortingRemoval: true,
     onColumnSizingChange: setColumnSizing,
@@ -40,10 +47,11 @@ export const Table = <T extends object>({ data, columns }: TableProps<T>) => {
     enableColumnResizing: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
-    <div className="w-full overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5">
+    <div className="w-full overflow-x-auto relative rounded-lg shadow ring-1 ring-black ring-opacity-5">
       <table className="table-auto min-w-[1500px] divide-y divide-gray-300 bg-white">
         <thead className="bg-gray-50">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -88,7 +96,7 @@ export const Table = <T extends object>({ data, columns }: TableProps<T>) => {
         </thead>
 
         <tbody className="divide-y divide-gray-200 bg-white">
-          {table.getRowModel().rows.map((row) => (
+          {table.getPaginationRowModel().rows.map((row) => (
             <tr key={row.id} className="hover:bg-gray-50">
               {row.getVisibleCells().map((cell) => (
                 <td
@@ -103,6 +111,63 @@ export const Table = <T extends object>({ data, columns }: TableProps<T>) => {
           ))}
         </tbody>
       </table>
+
+      <div className="sticky left-0 bottom-0 z-10 bg-white border-t px-4 py-3 flex items-center justify-between">
+        <div className="text-sm text-gray-600">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
+          <div className="flex items-center space-x-4">
+            <label htmlFor="pageSize" className="text-sm text-gray-600">
+              Rows per page:
+            </label>
+            <select
+              id="pageSize"
+              value={table.getState().pagination.pageSize}
+              onChange={(e) => {
+                table.setPageSize(Number(e.target.value));
+              }}
+              className="px-2 py-1 border rounded text-sm"
+            >
+              {[5, 10, 20, 50, 100].map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+          </div>{" "}
+        </div>
+
+        <div className="space-x-2">
+          <button
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+            className="px-2 py-1 text-sm border rounded disabled:opacity-50"
+          >
+            ⏮ First
+          </button>
+          <button
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="px-2 py-1 text-sm border rounded disabled:opacity-50"
+          >
+            ◀ Prev
+          </button>
+          <button
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            className="px-2 py-1 text-sm border rounded disabled:opacity-50"
+          >
+            Next ▶
+          </button>
+          <button
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+            className="px-2 py-1 text-sm border rounded disabled:opacity-50"
+          >
+            Last ⏭
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
