@@ -33,6 +33,13 @@ export const employeeInputSchema = z.object({
   // 💳 Payment Info
   paymentMethod: z.string(),
   moneyDispatchAddress: z.string().min(1),
-
-  salary: z.string(),
+  salary: z.string().refine(
+    (val) => {
+      const num = Number(val);
+      return num >= 200_000 && num <= 500_000;
+    },
+    {
+      message: "Salary must be between 200,000 and 500,000",
+    },
+  ),
 });

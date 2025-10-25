@@ -5,5 +5,6 @@ export const apiEndpoints = {
   logout: `${BASE_URL}/api/auth/logout`,
   allEmployees: `${BASE_URL}/api/employees`,
   createEmployee: `${BASE_URL}/api/employees`,
+  updateEmployee: `${BASE_URL}/api/employees`,
   getEmployeeById: `${BASE_URL}/api/employees`,
 };

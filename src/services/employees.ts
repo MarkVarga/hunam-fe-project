@@ -18,3 +18,14 @@ export const getEmployeeById = async (id: number): Promise<Employee> => {
   const response = await api.get(`${apiEndpoints.getEmployeeById}/${id}`);
   return response.data;
 };
+
+export const updateEmployee = async (
+  id: number,
+  payload: EmployeeSubmissionData,
+): Promise<Employee> => {
+  const response = await api.put(
+    `${apiEndpoints.updateEmployee}/${id}`,
+    payload,
+  );
+  return response.data;
+};

@@ -11,6 +11,7 @@ import {
   sexOptions,
 } from "@/constants/options";
 import { Employee } from "@/types/employee";
+import { useUpdateEmployee } from "@/services/hooks/useUpdateEmployee";
 
 export type EmployeeSubmissionData = z.infer<typeof employeeSchema>;
 
@@ -37,11 +38,16 @@ export const EmployeeForm = ({ employeeData }: EmployeeFormProps) => {
       : undefined,
   });
 
-  const { mutate } = useCreateEmployee();
+  const { mutate: createMutation } = useCreateEmployee();
+  const { mutate: updateMutation } = useUpdateEmployee(employeeData?.id ?? 0);
 
   const onSubmit = (data: EmployeeSubmissionData) => {
     console.log("Submitted:", data);
-    mutate(data, { onSuccess: () => console.log("success") });
+    if (employeeData) {
+      updateMutation(data, { onSuccess: () => console.log("success") });
+    } else {
+      createMutation(data, { onSuccess: () => console.log("success") });
+    }
   };
 
   const paymentMethod = watch("paymentMethod");
