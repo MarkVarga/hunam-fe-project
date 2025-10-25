@@ -45,14 +45,14 @@ export type Employee = {
   door: string;
 
   phone: string;
-  sex: Sex;
-  education: Education;
-  paymentMethod: PaymentMethod;
+  sex: number;
+  education: number;
+  paymentMethod: number;
 
   // Conditional fields based on paymentMethod
   bankAccountNumber?: string; // required if paymentMethod === Transfer
   moneyDispatchAddress?: string; // required if paymentMethod === Dispatch
   cashPaymentDay?: number; // required if paymentMethod === Cash
 
-  salary: number; // must be between 200_000 and 500_000 HUF
+  salary: string; // must be between 200_000 and 500_000 HUF
 };

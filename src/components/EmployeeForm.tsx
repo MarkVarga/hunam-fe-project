@@ -1,11 +1,17 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { employeeSchema } from "../schemas/employeeSchema";
-import { useCreateEmployee } from "../services/hooks/useCreateEmployee";
+import { employeeSchema } from "@/schemas/employeeSchema";
+import { useCreateEmployee } from "@/services/hooks/useCreateEmployee";
 import type { z } from "zod";
 import { FormInputField } from "./FormInputField"; // your generic input component
+import { FormSelectField } from "./FormSelectField";
+import {
+  educationOptions,
+  paymentMethodOptions,
+  sexOptions,
+} from "@/constants/options";
 
-export type EmployeeFormData = z.infer<typeof employeeSchema>;
+export type EmployeeSubmissionData = z.infer<typeof employeeSchema>;
 
 export const EmployeeForm = () => {
   const {
@@ -13,20 +19,15 @@ export const EmployeeForm = () => {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<EmployeeFormData>({
+  } = useForm({
     resolver: zodResolver(employeeSchema),
   });
 
   const { mutate } = useCreateEmployee();
 
-  const onSubmit = (data: EmployeeFormData) => {
+  const onSubmit = (data: EmployeeSubmissionData) => {
     console.log("Submitted:", data);
-    mutate(
-      {
-        ...data,
-      },
-      { onSuccess: () => console.log("success") },
-    );
+    mutate(data, { onSuccess: () => console.log("success") });
   };
 
   const paymentMethod = watch("paymentMethod");
@@ -44,72 +45,71 @@ export const EmployeeForm = () => {
           Personal Information
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="First Name"
             name="firstName"
             register={register}
             error={errors.firstName}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Last Name"
             name="lastName"
             register={register}
             error={errors.lastName}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Email"
             name="email"
             type="email"
             register={register}
             error={errors.email}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Phone"
             name="phone"
             register={register}
             error={errors.phone}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Date of Birth"
             name="dateOfBirth"
             type="date"
             register={register}
             error={errors.dateOfBirth}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Place of Birth"
             name="placeOfBirth"
             register={register}
             error={errors.placeOfBirth}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Mother’s First Name"
             name="mothersFirstName"
             register={register}
             error={errors.mothersFirstName}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Mother’s Last Name"
             name="mothersLastName"
             register={register}
             error={errors.mothersLastName}
           />
         </div>
-        <select {...register("sex")} className="...">
-          <option value="">Select</option>
-          <option value={0}>Male</option>
-          <option value={1}>Female</option>
-          <option value={2}>Other</option>
-        </select>
-        <select {...register("education")} className="...">
-          <option value="">Select</option>
-          <option value={1}>Primary</option>
-          <option value={2}>Secondary</option>
-          <option value={3}>Vocational</option>
-          <option value={4}>Bachelor’s</option>
-          <option value={5}>Master’s</option>
-          <option value={6}>Doctorate</option>
-        </select>{" "}
+        <div className="flex w-full justify-between gap-4 mt-4">
+          <FormSelectField
+            label="Sex"
+            options={sexOptions}
+            name="sex"
+            register={register}
+          />
+          <FormSelectField
+            label="Education"
+            options={educationOptions}
+            name="education"
+            register={register}
+          />
+        </div>
       </section>
 
       {/* 🏠 Address Info */}
@@ -118,67 +118,67 @@ export const EmployeeForm = () => {
           Address Details
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Country"
             name="country"
             register={register}
             error={errors.country}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="City"
             name="city"
             register={register}
             error={errors.city}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Zip Code"
             name="zipCode"
             register={register}
             error={errors.zipCode}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Parcel Number"
             name="parcelNumber"
             register={register}
             error={errors.parcelNumber}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Administrative Area"
             name="administrativeArea"
             register={register}
             error={errors.administrativeArea}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Administrative Area Type"
             name="administrativeAreaType"
             register={register}
             error={errors.administrativeAreaType}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="House Number"
             name="houseNumber"
             register={register}
             error={errors.houseNumber}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Building"
             name="building"
             register={register}
             error={errors.building}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Staircase"
             name="staircase"
             register={register}
             error={errors.staircase}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Floor"
             name="floor"
             register={register}
             error={errors.floor}
           />
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Door"
             name="door"
             register={register}
@@ -193,30 +193,21 @@ export const EmployeeForm = () => {
           Payment Information
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Salary (HUF)"
             name="salary"
             type="number"
             register={register}
             error={errors.salary}
           />
+          <FormSelectField
+            label="Payment method"
+            options={paymentMethodOptions}
+            name="paymentMethod"
+            register={register}
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Payment Method
-            </label>
-            <select
-              {...register("paymentMethod")}
-              className="w-full rounded-md border px-3 py-2"
-            >
-              <option value="">Select</option>
-              <option value={1}>Cash</option>
-              <option value={2}>Bank Transfer</option>
-              <option value={3}>PayPal</option>
-            </select>
-          </div>
-
-          <FormInputField<EmployeeFormData>
+          <FormInputField
             label="Money Dispatch Address"
             name="moneyDispatchAddress"
             register={register}

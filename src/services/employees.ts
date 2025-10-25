@@ -1,12 +1,7 @@
-import api from "../lib/axios";
-import { apiEndpoints } from "../constants/api";
-import { AllEmployeeResponse } from "./types/employeeService";
-import { EmployeeFormData } from "../components/EmployeeForm";
-
-type CreateEmployeePayload = {
-  username: string;
-  password: string;
-};
+import api from "@/lib/axios";
+import { apiEndpoints } from "@/constants/api";
+import { AllEmployeeResponse } from "@/services/types/employeeService";
+import { EmployeeFormData } from "@/components/EmployeeForm";
 
 export const getAllEmployees = async (): Promise<AllEmployeeResponse> => {
   const response = await api.get(`${apiEndpoints.allEmployees}`);

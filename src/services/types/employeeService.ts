@@ -1,4 +1,4 @@
-import { Employee } from "../../types/employee";
+import { Employee } from "@/types/employee";
 
 export type AllEmployeeResponse = {
   data: Employee[];

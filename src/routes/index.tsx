@@ -1,8 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { useFetchAllEmployees } from "../services/hooks/useFetchAllEmployees";
-import Table from "../components/Table";
+import { useFetchAllEmployees } from "@/services/hooks/useFetchAllEmployees";
+import Table from "@/components/Table";
 import { ColumnDef } from "@tanstack/react-table";
-import { Education, Employee, PaymentMethod, Sex } from "../types/employee";
+import { Education, Employee, PaymentMethod, Sex } from "@/types/employee";
 import { useMemo } from "react";
 
 export const Route = createFileRoute("/")({
