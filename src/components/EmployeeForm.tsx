@@ -10,10 +10,15 @@ import {
   paymentMethodOptions,
   sexOptions,
 } from "@/constants/options";
+import { Employee } from "@/types/employee";
 
 export type EmployeeSubmissionData = z.infer<typeof employeeSchema>;
 
-export const EmployeeForm = () => {
+interface EmployeeFormProps {
+  employeeData?: Employee;
+}
+
+export const EmployeeForm = ({ employeeData }: EmployeeFormProps) => {
   const {
     register,
     handleSubmit,
@@ -21,6 +26,15 @@ export const EmployeeForm = () => {
     watch,
   } = useForm({
     resolver: zodResolver(employeeSchema),
+    defaultValues: employeeData
+      ? {
+          ...employeeData,
+          sex: String(employeeData.sex),
+          education: String(employeeData.education),
+          paymentMethod: String(employeeData.paymentMethod),
+          salary: String(employeeData.salary),
+        }
+      : undefined,
   });
 
   const { mutate } = useCreateEmployee();

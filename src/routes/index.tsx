@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useFetchAllEmployees } from "@/services/hooks/useFetchAllEmployees";
 import Table from "@/components/Table";
 import { ColumnDef } from "@tanstack/react-table";
@@ -19,6 +19,7 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
   const { data: employees } = useFetchAllEmployees();
+  const navigate = useNavigate();
 
   const columns = useMemo<ColumnDef<Employee>[]>(
     () => [
@@ -187,12 +188,21 @@ function RouteComponent() {
         maxSize: 10,
         cell: ({ row }) => {
           return (
-            <Button onClick={() => console.log(row.original)}>Edit</Button>
+            <Button
+              onClick={() =>
+                navigate({
+                  to: "/edit-employee/$id",
+                  params: { id: row.original.id },
+                })
+              }
+            >
+              Edit
+            </Button>
           );
         },
       },
     ],
-    [],
+    [navigate],
   );
   return (
     <>
