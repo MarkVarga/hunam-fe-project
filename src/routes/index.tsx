@@ -4,6 +4,7 @@ import Table from "@/components/Table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Education, Employee, PaymentMethod, Sex } from "@/types/employee";
 import { useMemo } from "react";
+import { Button } from "@headlessui/react";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -179,6 +180,17 @@ function RouteComponent() {
             minimumFractionDigits: 0,
           }),
       },
+      {
+        id: "edit",
+        header: "",
+        enableResizing: false,
+        maxSize: 10,
+        cell: ({ row }) => {
+          return (
+            <Button onClick={() => console.log(row.original)}>Edit</Button>
+          );
+        },
+      },
     ],
     [],
   );
@@ -186,7 +198,11 @@ function RouteComponent() {
     <>
       {employees && (
         <div className="w-full overflow-x-auto">
-          <Table data={employees.data} columns={columns} />
+          <Table
+            data={employees.data}
+            columns={columns}
+            pinning={{ right: ["edit"] }}
+          />
         </div>
       )}
     </>

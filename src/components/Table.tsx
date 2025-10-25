@@ -8,14 +8,22 @@ import {
   ColumnSizingInfoState,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface TableProps<T extends object> {
   data: T[];
   columns: ColumnDef<T>[];
+  pinning?: {
+    left?: string[];
+    right?: string[];
+  };
 }
 
-export const Table = <T extends object>({ data, columns }: TableProps<T>) => {
+export const Table = <T extends object>({
+  data,
+  columns,
+  pinning,
+}: TableProps<T>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const [columnSizing, setColumnSizing] = useState<Record<string, number>>({});
@@ -37,7 +45,13 @@ export const Table = <T extends object>({ data, columns }: TableProps<T>) => {
   const table = useReactTable({
     data,
     columns,
-    state: { sorting, columnSizing, columnSizingInfo, pagination },
+    state: {
+      sorting,
+      columnSizing,
+      columnSizingInfo,
+      pagination,
+      columnPinning: pinning || {},
+    },
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
     enableSortingRemoval: true,
@@ -48,6 +62,7 @@ export const Table = <T extends object>({ data, columns }: TableProps<T>) => {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    enableColumnPinning: true,
   });
 
   return (
@@ -102,7 +117,14 @@ export const Table = <T extends object>({ data, columns }: TableProps<T>) => {
                 <td
                   key={cell.id}
                   style={{ width: cell.column.getSize() }}
-                  className="whitespace-nowrap px-4 py-3 text-sm text-gray-600"
+                  className={
+                    "whitespace-nowrap px-4 py-3 text-sm text-gray-600 " +
+                    (cell.column.getIsPinned() === "left"
+                      ? "sticky left-0 bg-white z-10 shadow-md "
+                      : cell.column.getIsPinned() === "right"
+                        ? "sticky right-0 bg-white z-10 shadow-md "
+                        : "")
+                  }
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
